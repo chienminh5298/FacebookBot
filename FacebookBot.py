@@ -8,6 +8,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from tqdm import tqdm
+from getpass import getpass
 import common
 import requests
 import os
@@ -21,18 +22,18 @@ class FacebookBot():
         CHROME_OPTIONS.add_argument('log-level=3')  # disable console warning
         CHROME_OPTIONS.add_experimental_option(
             "detach", True)  # Keep browser open when we done
-        # CHROME_OPTIONS.add_argument('--headless')  # Run without browser
+        CHROME_OPTIONS.add_argument('--headless')  # Run without browser
         CHROME_DRIVER = './chromedriver.exe'
 
         self.browser = webdriver.Chrome(
             executable_path=CHROME_DRIVER, options=CHROME_OPTIONS, service_log_path=os.devnull)
         self.browser.get(url="https://facebook.com")
-        self.wait = WebDriverWait(self.browser, 20)
+        self.wait = WebDriverWait(self.browser, 10)
         self.loginBotAccount()
 
     def loginBotAccount(self):
         EMAIL = input("\nEnter your username: ")
-        PASSWORD = input("Enter your password: ")
+        PASSWORD = getpass('Enter your password: ')
 
         self.browser.find_element_by_id("email").send_keys(EMAIL)
         submit = self.browser.find_element_by_id("pass")
@@ -42,7 +43,7 @@ class FacebookBot():
         # --- Check login correct or not ---
         try:
             isCredentialCorrect = self.wait.until(
-                expected_conditions.visibility_of_element_located((By.ID,'pass')))
+                expected_conditions.visibility_of_element_located((By.ID, 'pass')))
         except:
             isCredentialCorrect = True
 
@@ -70,13 +71,21 @@ class FacebookBot():
 
         self.browser.get(url='https://facebook.com/'+friendName+'/photos_all')
 
-        # Scrolldown to load all photos
         print('\nWait a minute, system is loading your photos ... \n')
+
+        # Scrolldown to load all photos
         common.scrollDownToBottom(self.browser, 'document.body', True)
+
         wrapper = self.browser.find_element_by_xpath(
             "//div[@data-pagelet='ProfileAppSection_0']")
+
+        # List A tag - List Video => Total Photos
         listA = wrapper.find_elements_by_xpath(
-            "//img[@referrerpolicy='origin-when-cross-origin']//parent::a")
+            "//a[@class='oajrlxb2 g5ia77u1 qu0x051f esr5mh6w e9989ue4 r7d6kgcz rq0escxv nhd2j8a9 a8c37x1j p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x jb3vyjys rz4wbd8a qt6c0cv9 a8nywdso i1ao9s8h esuyzwwr f1sip0of lzcic4wl gmql0nx0 gpro0wi8 datstx6m l9j0dhe7 k4urcfbm']")
+        listVideo = wrapper.find_elements_by_xpath(
+            "//span[@class='d2edcug0 hpfvmrgz qv66sw1b c1et5uql lr9zc1uh a8c37x1j keod5gw0 nxhoafnm aigsh9s9 d9wwppkn fe6kdd0r mau55g9w c8b282yb mdeji52x e9vueds3 j5wam9gi knj5qynh ljqsnud1']")
+        for i in range(len(listVideo)):
+            listA.pop()
 
         i = 0
         count = 5 if 5 < len(listA) else len(listA)
@@ -91,19 +100,21 @@ class FacebookBot():
                 # Open link in a new tab
                 listA[j].send_keys(Keys.CONTROL + Keys.RETURN)
 
-            sleep(3)  # Wating load page
             tabs = self.browser.window_handles
             for index, tab in enumerate(tabs):  # 1 loop load only 5 pics
                 if(index != 0):  # leave main tab
                     self.browser.switch_to.window(tabs[index])
-                    picEle = self.browser.find_element_by_xpath(
-                        "//img[@data-visualcompletion='media-vc-image'][@referrerpolicy='origin-when-cross-origin']")
-                    # --- Save photo from pic URL ---
-                    response = requests.get(picEle.get_attribute('src'))
-                    with open('./public/'+str(i+1)+'.png', 'wb') as file:
-                        file.write(response.content)
-                    self.browser.close()
-                    # print('Saved ' + str(i+1) + '/' + str(len(listA)))
+
+                    try:
+                        picEle = self.wait.until(expected_conditions.visibility_of_element_located(
+                            (By.XPATH, "//img[@data-visualcompletion='media-vc-image'][@referrerpolicy='origin-when-cross-origin']")))
+                        # --- Save photo from pic URL ---
+                        response = requests.get(picEle.get_attribute('src'))
+                        with open('./public/'+str(i+1)+'.png', 'wb') as file:
+                            file.write(response.content)
+                        self.browser.close()
+                    except:
+                        pass
                     i = i + 1
 
             # Switch to Main tab every loop

@@ -12,7 +12,7 @@ def scrollDownToBottom(browser, elem, window=True):
             browser.execute_script(elem+".scrollTo(0,"+str(last_height)+");")
 
         # Wait to load
-        time.sleep(1.5)
+        time.sleep(2)
 
         # Calculate new scroll height and compare with last scroll height
         new_height = browser.execute_script("return "+elem+".scrollHeight")
