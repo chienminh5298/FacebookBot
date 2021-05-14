@@ -12,6 +12,9 @@ from getpass import getpass
 import common
 import requests
 import os
+import pyautogui
+import pyperclip
+import random
 
 
 class FacebookBot():
@@ -30,6 +33,9 @@ class FacebookBot():
         self.browser.get(url="https://facebook.com")
         self.wait = WebDriverWait(self.browser, 10)
         self.loginBotAccount()
+
+    def quit(self):
+        self.browser.quit()
 
     def loginBotAccount(self):
         EMAIL = input("\nEnter your username: ")
@@ -128,3 +134,23 @@ class FacebookBot():
 
         progressBar.close()
         print('\nAll done !!! See your photos at ./public/')
+
+    def spamBot(self):
+        print('\nStep1: Enter your message, use || char to seperate each message\nStep2: Enter number of times you want to spam\nStep3: Enter delay time each message\nStep4: Focus the text box where you type the message')
+        msg = input("\nEnter your message: ").split(" || ")
+        n = int(input("Enter number of times: "))
+        m = float(input("Enter delay time: "))
+
+        print("Ready...")
+        # countdown 5s
+        for i in range(5, 0, -1):
+            print(i, end="...", flush='False')
+            sleep(1)
+        print("Goooooo !")
+
+        # SPAM
+        for i in range(n):
+            pyperclip.copy(random.choice(msg))
+            pyautogui.hotkey("ctrl", "v")
+            pyautogui.press("enter")
+            sleep(m)  # Delay
