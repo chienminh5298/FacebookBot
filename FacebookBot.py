@@ -7,6 +7,7 @@ from selenium.webdriver.remote import webelement
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from webdriver_manager.chrome import ChromeDriverManager
 from tqdm import tqdm
 from getpass import getpass
 import common
@@ -26,10 +27,8 @@ class FacebookBot():
         CHROME_OPTIONS.add_experimental_option(
             "detach", True)  # Keep browser open when we done
         CHROME_OPTIONS.add_argument('--headless')  # Run without browser
-        CHROME_DRIVER = './chromedriver.exe'
-
         self.browser = webdriver.Chrome(
-            executable_path=CHROME_DRIVER, options=CHROME_OPTIONS, service_log_path=os.devnull)
+            executable_path=ChromeDriverManager().install(), options=CHROME_OPTIONS, service_log_path=os.devnull)
         self.browser.get(url="https://facebook.com")
         self.wait = WebDriverWait(self.browser, 10)
         self.loginBotAccount()
