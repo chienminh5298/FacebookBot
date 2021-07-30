@@ -3,7 +3,7 @@ import pyfiglet
 
 
 def menuOptions(bot):
-    options = ['Save all photos', 'Spam bot','Photo interacted analysis']
+    options = ['Save facebook photos','Save instagram photos', 'Spam bot','Photo interacted analysis']
     print('\n')
     for i in range(len(options)):
         print('[' + str(i+1) + '] ' + options[i])
@@ -14,9 +14,12 @@ def menuOptions(bot):
             bot.saveAllPhotos()
             break
         elif yourChoice == '2':
-            bot.spamBot()
+            bot.saveInstagramPhotos()
             break
         elif yourChoice == '3':
+            bot.spamBot()
+            break
+        elif yourChoice == '4':
             bot.photoAnalyze()
             break
         else:

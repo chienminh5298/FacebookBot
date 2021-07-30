@@ -19,11 +19,11 @@ class FacebookBot():
         CHROME_OPTIONS.add_argument('log-level=3')  # disable console warning
         CHROME_OPTIONS.add_experimental_option(
             "detach", True)  # Keep browser open when we done
-        CHROME_OPTIONS.add_argument('--headless')  # Run without browser
+        # CHROME_OPTIONS.add_argument('--headless')  # Run without browser
         self.browser = webdriver.Chrome(
             executable_path=ChromeDriverManager().install(), options=CHROME_OPTIONS, service_log_path=os.devnull)
         self.browser.get(url="https://facebook.com")
-        self.wait = WebDriverWait(self.browser, 10)
+        self.wait = WebDriverWait(self.browser, 5)
         self.loginBotAccount()
 
     def quit(self):
@@ -73,3 +73,6 @@ class FacebookBot():
     
     def photoAnalyze(self):
         modules.photoAnalyze(self)
+    
+    def saveInstagramPhotos(self):
+        modules.saveInstagramPhotos(self)
