@@ -1,18 +1,25 @@
 from time import sleep
-import pyperclip
-import pyautogui
-import random
-import common
-from tqdm import tqdm
+import os
+try:
+	import pyperclip
+	import pyautogui
+	import random
+	import common
+	from tqdm import tqdm
+	import requests
+	import numpy as np
+	from tabulate import tabulate
+	import matplotlib.pyplot as plt
+except:
+	os.system('pip install pyperclip pyautogui random common tqdm requests numpy tabulate matplotlib')
+
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
-import requests
-import numpy as np
-from tabulate import tabulate
-import matplotlib.pyplot as plt
+
+
 
 
 class UserFacebook():
@@ -412,6 +419,7 @@ def photoAnalyze(self):
 
 
 def saveInstagramPhotos(self):
+	print('\nThis function only save the thumbnails only !!!\n')
 	self.browser.get(url="https://www.instagram.com/")
 	self.wait.until(expected_conditions.visibility_of_element_located(
 		(By.XPATH, '//*[contains(text(),"Continue as") or contains(text(),"Log in with Facebook")]'))).click()

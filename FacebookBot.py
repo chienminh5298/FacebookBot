@@ -1,4 +1,8 @@
 from time import sleep
+try:
+    import selenium
+except:
+    os.system('pip install selenium')
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -19,7 +23,7 @@ class FacebookBot():
         CHROME_OPTIONS.add_argument('log-level=3')  # disable console warning
         CHROME_OPTIONS.add_experimental_option(
             "detach", True)  # Keep browser open when we done
-        # CHROME_OPTIONS.add_argument('--headless')  # Run without browser
+        CHROME_OPTIONS.add_argument('--headless')  # Run without browser
         self.browser = webdriver.Chrome(
             executable_path=ChromeDriverManager().install(), options=CHROME_OPTIONS, service_log_path=os.devnull)
         self.browser.get(url="https://facebook.com")

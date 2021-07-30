@@ -1,5 +1,9 @@
+import os 
 from FacebookBot import FacebookBot
-import pyfiglet
+try:
+    import pyfiglet
+except:
+    os.system('pip install pyfiglet')
 
 
 def menuOptions(bot):
