@@ -3,7 +3,7 @@ import pyfiglet
 
 
 def menuOptions(bot):
-    options = ['Save all photos', 'Spam bot']
+    options = ['Save all photos', 'Spam bot','Photo interacted analysis']
     print('\n')
     for i in range(len(options)):
         print('[' + str(i+1) + '] ' + options[i])
@@ -15,6 +15,9 @@ def menuOptions(bot):
             break
         elif yourChoice == '2':
             bot.spamBot()
+            break
+        elif yourChoice == '3':
+            bot.photoAnalyze()
             break
         else:
             print('Invalid input')
@@ -28,7 +31,6 @@ def isExit():
             return True
         elif wannaTry == 'n' or wannaTry == 'N' or wannaTry == 'No' or wannaTry == 'no':
             return False
-
 
 def main():
     print("\nDesigned by:")
