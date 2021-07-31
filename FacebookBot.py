@@ -34,10 +34,8 @@ class FacebookBot():
         self.browser.quit()
 
     def loginBotAccount(self):
-        # EMAIL = input("\nEnter your username: ")
-        # PASSWORD = getpass('Enter your password: ')
-        EMAIL = 'binarystillhere@gmail.com'
-        PASSWORD = 'ChienMinh1@#$$#@!522988'
+        EMAIL = input("\nEnter your username: ")
+        PASSWORD = getpass('Enter your password: ')
 
         self.browser.find_element_by_id("email").send_keys(EMAIL)
         submit = self.browser.find_element_by_id("pass")
